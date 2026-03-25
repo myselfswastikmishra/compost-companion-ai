@@ -6,10 +6,11 @@ import SensorHistory from "@/components/SensorHistory";
 import ChatbotWidget from "@/components/ChatbotWidget";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Leaf, TrendingUp, Thermometer, Droplets } from "lucide-react";
+import { Flame, Leaf, TrendingUp, Thermometer, Droplets } from "lucide-react";
 
 interface Reading {
   pm25: number;
+  mq135: number;
   temperature: number;
   humidity: number;
   timestamp: Date;

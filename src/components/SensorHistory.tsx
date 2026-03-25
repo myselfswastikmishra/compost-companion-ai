@@ -1,7 +1,8 @@
-import { Clock, Thermometer, Droplets, Wind } from "lucide-react";
+import { Clock, Flame, Thermometer, Droplets, Wind } from "lucide-react";
 
 interface Reading {
   pm25: number;
+  mq135: number;
   temperature: number;
   humidity: number;
   timestamp: Date;

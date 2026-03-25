@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Activity, Droplets, Loader2, Thermometer, Wind } from "lucide-react";
+import { Activity, Droplets, Flame, Loader2, Thermometer, Wind } from "lucide-react";
 
 interface SensorData {
   pm25: number;
+  mq135: number;
   temperature: number;
   humidity: number;
 }
