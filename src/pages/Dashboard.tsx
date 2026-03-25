@@ -21,7 +21,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [readings, setReadings] = useState<Reading[]>([]);
 
-  const handleAnalyze = async (data: { pm25: number; temperature: number; humidity: number }) => {
+  const handleAnalyze = async (data: { pm25: number; mq135: number; temperature: number; humidity: number }) => {
     setLoading(true);
     try {
       const { data: result, error } = await supabase.functions.invoke("compost-chat", {
@@ -52,9 +52,10 @@ export default function Dashboard() {
 
         {/* Quick stats */}
         {readings.length > 0 && (
-          <div className="grid grid-cols-3 gap-4 mb-6 animate-fade-in">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 animate-fade-in">
             {[
               { label: "Last PM2.5", value: `${readings[0].pm25} µg/m³`, icon: TrendingUp, color: "text-compost-warm" },
+              { label: "Last MQ-135", value: `${readings[0].mq135} ppm`, icon: Flame, color: "text-compost-warm" },
               { label: "Last Temp", value: `${readings[0].temperature}°C`, icon: Thermometer, color: "text-destructive" },
               { label: "Last Humidity", value: `${readings[0].humidity}%`, icon: Droplets, color: "text-compost-green-light" },
             ].map((stat) => (
