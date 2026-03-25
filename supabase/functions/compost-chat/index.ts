@@ -11,6 +11,8 @@ Key knowledge:
 - Optimal composting temperature: 55-65°C (thermophilic phase)
 - Ideal humidity: 50-60%
 - PM2.5 indicates decomposition activity and air quality around the compost
+- MQ-135 detects gases like NH3, NOx, CO2, benzene — useful for monitoring decomposition gases and air quality
+- Normal composting MQ-135 range: 100-500 ppm; above 500 ppm may indicate anaerobic conditions
 - Carbon-to-nitrogen ratio should be ~30:1
 - Composting phases: mesophilic (20-40°C), thermophilic (40-70°C), cooling, maturation
 
@@ -20,10 +22,11 @@ When analyzing sensor data, always:
 3. If suitable, estimate time to completion based on the phase
 4. Reference the sensor values in your response`;
 
-const ANALYZE_PROMPT = (data: { pm25: number; temperature: number; humidity: number }) =>
+const ANALYZE_PROMPT = (data: { pm25: number; mq135: number; temperature: number; humidity: number }) =>
   `Analyze these compost sensor readings and determine if conditions are suitable for bioWaste to turn into compost:
 
 - PM2.5: ${data.pm25} µg/m³
+- MQ-135 (gas): ${data.mq135} ppm
 - Temperature: ${data.temperature}°C
 - Humidity: ${data.humidity}%
 
@@ -32,7 +35,8 @@ Provide:
 2. If unsuitable: specific steps to reach optimal conditions
 3. If suitable: estimated timeframe until bioWaste converts to compost
 4. Current composting phase based on temperature
-5. Any concerns about the readings
+5. Gas level assessment from MQ-135 (normal decomposition vs anaerobic concerns)
+6. Any concerns about the readings
 
 Format with clear headers and bullet points.`;
 

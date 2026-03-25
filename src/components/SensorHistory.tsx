@@ -1,7 +1,8 @@
-import { Clock, Thermometer, Droplets, Wind } from "lucide-react";
+import { Clock, Flame, Thermometer, Droplets, Wind } from "lucide-react";
 
 interface Reading {
   pm25: number;
+  mq135: number;
   temperature: number;
   humidity: number;
   timestamp: Date;
@@ -24,8 +25,9 @@ export default function SensorHistory({ readings }: Props) {
         {readings.map((r, i) => (
           <div key={i} className="flex items-center justify-between bg-muted/50 rounded-lg px-4 py-2.5 text-sm">
             <span className="text-muted-foreground">{r.timestamp.toLocaleTimeString()}</span>
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-wrap">
               <span className="flex items-center gap-1"><Wind className="h-3.5 w-3.5 text-compost-warm" />{r.pm25}</span>
+              <span className="flex items-center gap-1"><Flame className="h-3.5 w-3.5 text-compost-warm" />{r.mq135} ppm</span>
               <span className="flex items-center gap-1"><Thermometer className="h-3.5 w-3.5 text-destructive" />{r.temperature}°C</span>
               <span className="flex items-center gap-1"><Droplets className="h-3.5 w-3.5 text-compost-green-light" />{r.humidity}%</span>
             </div>

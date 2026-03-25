@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Activity, Droplets, Loader2, Thermometer, Wind } from "lucide-react";
+import { Activity, Droplets, Flame, Loader2, Thermometer, Wind } from "lucide-react";
 
 interface SensorData {
   pm25: number;
+  mq135: number;
   temperature: number;
   humidity: number;
 }
@@ -17,6 +18,7 @@ interface Props {
 
 export default function SensorForm({ onSubmit, loading }: Props) {
   const [pm25, setPm25] = useState("");
+  const [mq135, setMq135] = useState("");
   const [temperature, setTemperature] = useState("");
   const [humidity, setHumidity] = useState("");
 
@@ -24,6 +26,7 @@ export default function SensorForm({ onSubmit, loading }: Props) {
     e.preventDefault();
     onSubmit({
       pm25: parseFloat(pm25),
+      mq135: parseFloat(mq135),
       temperature: parseFloat(temperature),
       humidity: parseFloat(humidity),
     });
@@ -36,13 +39,20 @@ export default function SensorForm({ onSubmit, loading }: Props) {
         Sensor Readings
       </h2>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Label htmlFor="pm25" className="flex items-center gap-1.5 mb-1.5">
             <Wind className="h-3.5 w-3.5 text-compost-warm" />
             PM2.5 (µg/m³)
           </Label>
           <Input id="pm25" type="number" step="0.1" min="0" value={pm25} onChange={e => setPm25(e.target.value)} placeholder="e.g. 35" required />
+        </div>
+        <div>
+          <Label htmlFor="mq135" className="flex items-center gap-1.5 mb-1.5">
+            <Flame className="h-3.5 w-3.5 text-compost-warm" />
+            MQ-135 (ppm)
+          </Label>
+          <Input id="mq135" type="number" step="0.1" min="0" value={mq135} onChange={e => setMq135(e.target.value)} placeholder="e.g. 200" required />
         </div>
         <div>
           <Label htmlFor="temp" className="flex items-center gap-1.5 mb-1.5">
