@@ -40,11 +40,51 @@ Provide:
 
 Format with clear headers and bullet points.`;
 
+const CROP_PROMPT = (crop: string) =>
+  `The user wants to grow **${crop}**. Provide a comprehensive guide on:
+
+1. **Best Bio-Waste Materials** — List specific bio-waste types (kitchen scraps, yard waste, etc.) ideal for creating compost suited to ${crop}
+2. **Nutrient Requirements** — What NPK ratio and micronutrients ${crop} needs and how to achieve that through composting
+3. **Carbon-to-Nitrogen Ratio** — Recommended C:N ratio for this crop's compost
+4. **Composting Method** — Best composting method (hot composting, vermicomposting, etc.) for this crop
+5. **Application Guidelines** — How much compost to apply, when, and how
+6. **Bio-Waste to Avoid** — Materials that could harm ${crop}
+7. **Expected Compost Readiness** — Typical timeline
+
+Format with clear headers, bullet points, and emojis for visual appeal.`;
+
+const TIMELINE_PROMPT = (days: number, wasteType: string) =>
+  `The user wants to convert ${wasteType || "mixed bio-waste"} into usable compost within **${days} days**. Provide:
+
+1. **Feasibility Assessment** — Is ${days} days realistic? What's the minimum realistic timeline?
+2. **Day-by-Day Action Plan** — Break down into phases with specific daily/weekly actions
+3. **Optimal Conditions to Maintain** — Temperature, humidity, turning frequency for fastest decomposition
+4. **Accelerators & Techniques** — Natural composting accelerators, hot composting methods, additives
+5. **Sensor Monitoring Schedule** — When and how often to check PM2.5, MQ-135, temperature, humidity
+6. **Warning Signs** — What to watch for that indicates problems
+7. **Expected Quality** — What compost quality to expect in this timeframe
+
+Format with clear phases, timelines, and actionable steps. Use emojis for visual appeal.`;
+
+const WASTE_AUDIT_PROMPT = (wasteItems: string) =>
+  `The user has these bio-waste materials available: **${wasteItems}**
+
+Analyze and provide:
+1. **Compostability Rating** — Rate each item (Excellent / Good / Fair / Poor / Not Compostable)
+2. **Carbon vs Nitrogen Classification** — Classify each as Brown (Carbon) or Green (Nitrogen) material
+3. **Optimal Mix Ratio** — Suggest the best mixing ratio from these materials for ideal C:N ratio
+4. **Preparation Steps** — How to prepare each material (shredding, soaking, etc.)
+5. **Estimated Decomposition Time** — How long each material takes to break down
+6. **Potential Issues** — Any concerns with specific materials (pests, odor, pathogens)
+7. **Missing Materials** — Suggest what to add for a balanced compost
+
+Format with tables where appropriate, clear headers, and emojis.`;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages, type, sensorData } = await req.json();
+    const { messages, type, sensorData, crop, days, wasteType, wasteItems } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -56,6 +96,12 @@ serve(async (req) => {
       aiMessages.push({ role: "user", content: ANALYZE_PROMPT(sensorData) });
     } else if (type === "chat" && messages) {
       aiMessages = [{ role: "system", content: SYSTEM_PROMPT }, ...messages];
+    } else if (type === "crop_recommend" && crop) {
+      aiMessages.push({ role: "user", content: CROP_PROMPT(crop) });
+    } else if (type === "timeline_plan") {
+      aiMessages.push({ role: "user", content: TIMELINE_PROMPT(days || 30, wasteType || "") });
+    } else if (type === "waste_audit" && wasteItems) {
+      aiMessages.push({ role: "user", content: WASTE_AUDIT_PROMPT(wasteItems) });
     } else {
       throw new Error("Invalid request type");
     }
