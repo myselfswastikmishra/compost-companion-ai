@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { Leaf, LogOut, Menu, X } from "lucide-react";
+import { Leaf, LogOut, Menu, X, BookOpen } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -16,36 +16,45 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 glass-card border-b px-4 py-3">
-      <div className="container mx-auto flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="gradient-primary rounded-lg p-1.5">
-            <Leaf className="h-5 w-5 text-primary-foreground" />
+    <nav className="sticky top-0 z-50 bg-background/60 backdrop-blur-2xl border-b border-border/20">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-shadow">
+            <Leaf className="h-4.5 w-4.5 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl font-bold text-foreground">CompostIQ</span>
+          <div>
+            <span className="font-display text-lg font-bold text-foreground tracking-tight">CompostIQ</span>
+            <span className="hidden sm:inline text-[9px] text-primary font-medium ml-2 uppercase tracking-widest">v2.0</span>
+          </div>
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link>
-          <Link to="/tutorial" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Guide</Link>
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
-            <LogOut className="h-4 w-4 mr-1" /> Logout
+        <div className="hidden md:flex items-center gap-1">
+          <Link to="/" className="px-3 py-1.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all">
+            Dashboard
+          </Link>
+          <Link to="/tutorial" className="px-3 py-1.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all flex items-center gap-1.5">
+            <BookOpen className="h-3.5 w-3.5" />
+            Guide
+          </Link>
+          <div className="w-px h-5 bg-border/30 mx-2" />
+          <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-foreground">
+            <LogOut className="h-4 w-4 mr-1.5" /> Logout
           </Button>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="md:hidden text-foreground p-1.5 rounded-lg hover:bg-muted/50 transition-colors" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden mt-3 flex flex-col gap-2 pb-3">
-          <Link to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground px-2 py-1" onClick={() => setMobileOpen(false)}>Dashboard</Link>
-          <Link to="/tutorial" className="text-sm font-medium text-muted-foreground hover:text-foreground px-2 py-1" onClick={() => setMobileOpen(false)}>Guide</Link>
-          <Button variant="ghost" size="sm" className="justify-start" onClick={handleLogout}>
-            <LogOut className="h-4 w-4 mr-1" /> Logout
+        <div className="md:hidden border-t border-border/20 bg-card/80 backdrop-blur-xl px-4 py-3 flex flex-col gap-1 animate-fade-in">
+          <Link to="/" className="px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+          <Link to="/tutorial" className="px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all" onClick={() => setMobileOpen(false)}>Guide</Link>
+          <Button variant="ghost" size="sm" className="justify-start mt-1" onClick={handleLogout}>
+            <LogOut className="h-4 w-4 mr-1.5" /> Logout
           </Button>
         </div>
       )}
